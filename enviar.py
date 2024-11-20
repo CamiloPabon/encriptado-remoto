@@ -1,13 +1,15 @@
 from Crypto.Cipher import Blowfish, PKCS1_OAEP
 from Crypto.PublicKey import RSA
 from Crypto.Util.Padding import pad
+import os
 import socket
 
 # Función de cifrado Blowfish
-def cifrar_blowfish(mensaje, clave):
+def cifrar_blowfish(mensaje):
+    clave = os.urandom(16)  # Genera una clave aleatoria de 16 bytes (entre 4 y 56 bytes es permitido)
     cipher = Blowfish.new(clave, Blowfish.MODE_ECB)
     mensaje_padded = pad(mensaje.encode(), Blowfish.block_size)
-    return cipher.encrypt(mensaje_padded)
+    return clave + cipher.encrypt(mensaje_padded)  # Incluye la clave con el mensaje cifrado
 
 # Función de cifrado de Sustitución
 def cifrar_sustitucion(mensaje, clave):
@@ -42,8 +44,7 @@ def main():
     metodo_cifrado = input("Introduce el método de cifrado \n1. Blowfish \n2. Sustitucion\n3. Transposicion\n4. RSA: ").strip()
 
     if metodo_cifrado == "1":
-        clave = input("Introduce la clave para el cifrado (debe ser entre 4 y 56 caracteres): ").encode()
-        mensaje_cifrado = cifrar_blowfish(mensaje, clave)
+        mensaje_cifrado = cifrar_blowfish(mensaje)
     elif metodo_cifrado == "2":
         clave = int(input("Introduce la clave numérica para el cifrado de sustitución: "))
         mensaje_cifrado = cifrar_sustitucion(mensaje, clave).encode()
@@ -64,3 +65,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
