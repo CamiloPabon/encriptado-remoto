@@ -60,7 +60,7 @@ def main():
         mensaje_cifrado = clave_privada + b'|' + mensaje_cifrado
     else:
         raise ValueError("Método de cifrado no soportado")
-
+    print("Mensaje cifrado: ", mensaje_cifrado)
     enviar_mensaje(mensaje_cifrado, metodo_cifrado)
 
 if __name__ == "__main__":
